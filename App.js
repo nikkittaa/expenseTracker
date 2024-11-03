@@ -8,6 +8,7 @@ import AllExpenses from './screens/AllExpenses';
 import { GlobalStyles } from './constants/styles';
 import {Ionicons} from '@expo/vector-icons';
 import IconButtons from './components/UI/IconButton';
+import ExpensesContextProvider from './store/expenses-context';
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -18,7 +19,7 @@ function ExpensesOverview(){
     headerTintColor: 'white',
     tabBarStyle: {backgroundColor: GlobalStyles.colors.primary500},
     tabBarActiveTintColor: GlobalStyles.colors.accent500,
-    headerRight: ({tintColor}) => (<IconButtons name = "add" size = {24} color = {tintColor} 
+    headerRight: ({tintColor}) => (<IconButtons icon = "add" size = {24} color = {tintColor} 
       onPress = {() => {navigation.navigate('ManageExpense')}}/>),
     
   })}>
@@ -46,7 +47,8 @@ function ExpensesOverview(){
 export default function App() {
   return (
     <>
-    <StatusBar style="auto" />
+    <StatusBar style="light" />
+    <ExpensesContextProvider>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{
         headerStyle: { backgroundColor: GlobalStyles.colors.primary500},
@@ -68,6 +70,7 @@ export default function App() {
           />
       </Stack.Navigator>
     </NavigationContainer>
+    </ExpensesContextProvider>
     </>
   );
 }
