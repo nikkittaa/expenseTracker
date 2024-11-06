@@ -12,7 +12,9 @@ export default function ManageExpense({route, navigation}){
     const edittedexpenseId = route.params?.expenseId;
 
     const isEditing = !!edittedexpenseId;
-    console.log('here');
+
+    const selectedExpense = expensesCtx.expenses.find((expense) => expense.id === edittedexpenseId);
+    
     useLayoutEffect(() => {
         navigation.setOptions({
             title: isEditing ? 'Edit Expense' : 'Add Expense'
@@ -28,23 +30,23 @@ export default function ManageExpense({route, navigation}){
         navigation.goBack();
     }
 
-    function confirmHandler(){
+    function confirmHandler(expenseData){
         if(isEditing){
-            expensesCtx.updateExpense(edittedexpenseId, 
-                {description: "Test!!!!", amount: 999, date: new Date('2024-11-01')});
+            expensesCtx.updateExpense(edittedexpenseId, expenseData);
         }else{
-            expensesCtx.addExpense({description: "Test", amount: 999, date: new Date('2024-11-03')});
+            expensesCtx.addExpense(expenseData);
         }
         navigation.goBack();
     }
    
     return (
         <View style = {styles.container}>
-            <ExpenseForm/>
-            <View style = {styles.buttons} >
-                <Button style = {styles.button} mode = "flat" onPress = {cancelHandler}>Cancel</Button>
-                <Button style = {styles.button} onPress = {confirmHandler}>{isEditing ? "Update" : "Add"}</Button>
-            </View>
+            <ExpenseForm onCancel = {cancelHandler} 
+                    isEditing={isEditing}
+                    onSubmit={confirmHandler}
+                    defaultValues = {selectedExpense}
+                />
+           
             {isEditing && <View style = {styles.deleteContainer}>
                 <IconButtons 
                 icon = "trash" 
@@ -62,11 +64,7 @@ const styles = StyleSheet.create({
         padding: 24,
         backgroundColor: GlobalStyles.colors.primary800
     },
-    buttons: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
+    
     deleteContainer: {
         marginTop: 16,
         paddingTop: 8,
@@ -74,8 +72,5 @@ const styles = StyleSheet.create({
         borderTopColor: GlobalStyles.colors.primary200,
         alignItems: 'center'
     },
-    button: {
-        minWidth: 120,
-        marginHorizontal: 8
-    }
+   
 });
