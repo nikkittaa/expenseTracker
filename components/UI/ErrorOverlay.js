@@ -1,5 +1,7 @@
 import { Text, StyleSheet, View } from "react-native";
 import { GlobalStyles } from "../../constants/styles";
+import Button from "./Button";
+
 
 export default function ErrorOverlay({message, onConfirm}){
     return <View style = {styles.container}>
